@@ -1,0 +1,136 @@
+import re
+
+# Define the mapping of numbers to words
+number_words = {
+    '0': 'noti',
+    '1': 'Imwe',
+    '2': 'Ili',
+    '3': 'Itatu',
+    '4': 'Inya',
+    '5': 'Itano',
+    '6': 'Thanthatu',
+    '7': 'Muonza',
+    '8': 'Nyaanya',
+    '9': 'Keenda',
+    '10': 'Ikumi'
+}
+number_words1 ={
+    "2":"eli",
+    '3': 'atatu',
+    '4': 'ana',
+    '5': 'atano',
+    '6': 'Thanthatu',
+    '7': 'Muonza',
+    '8': 'Nyaanya',
+    '9': 'Keenda',
+}
+
+# Define the mapping of words to numbers
+word_numbers = {v: k for k, v in number_words.items()}
+
+# Regular expressions for matching numbers and words
+number_regex = r'^\d+$'
+word_regex = r'^[A-Za-z\s]+$'
+
+# def convert_number_to_words(number):
+#     # Check if the input is a number
+#     if not re.match(number_regex, number):
+#         return "Invalid input. Please enter a valid number."
+
+#     # Convert each digit to its corresponding word
+#     words = [number_words[digit] for digit in number]
+
+#     # Join the words and return the result
+#     return ' '.join(words)
+def convert_number_to_words(number):
+    # Check if the input is a number
+    if not re.match(number_regex, number):
+        return "Invalid input. Please enter a valid number."
+
+    # Convert the number to words
+    if len(number) == 1:
+        # Single-digit number
+        words = number_words[number]
+    elif len(number) == 2:
+        # Two-digit number
+        if number [0] == '1' and number [1] == '0':
+            words = "ikumi"
+        elif number[0] == '1':
+            # Numbers from 10 to 19
+            words = "Ikumi na " + number_words[number[1]]
+        elif number[0] == '4' and number[1]== '0' :
+              words = "Miongo ina"
+        elif number[0] in  ['2', '3', '5', '6', '7', '8', '9'] and number[1] == '0':
+          words = "Miongo " + number_words[number[0]]
+        else:
+            # Numbers from 20 to 99
+            words = "Miongo " + number_words[number[0]] + " na " + number_words[number[1]]
+    elif len(number) == 3:
+        # Three-digit number
+        if number[0] == '1' and number[1]== "0" and number[2]== '0' :
+          words = "iana"
+        elif number[0]=='1' and number[1]== '1' and number [2] in ['1','2','3','4','5','6','7','8','9']:
+                  words = "iana yimwe na ikumi na " + number_words[number[2]]
+        elif number[0]=='1' and number[1] in ['2','3','4','5','6','7','8','9'] and number [2] == '0':
+                  words = "iana yimwe na miongo " + number_words[number[1]]
+        elif number[0] == '1' and number[1]=='0' and number[2] in ['1','2','3','4','5','6','7','8','9'] :
+              words = "iana yimwe na " + number_words[number[2]] 
+        elif number[0]=='1' and number[1] in ['2','3','4','5','6','7','8','9'] and number[2] in ['2','3','4','5','6','7','8','9']:
+                  words = "iana yimwe na miongo " + number_words[number[1]] + ' na ' + number_words[number[2]]
+        elif number[0] in ['2','3','4','5','6','7','8','9'] and number[1]=='0' and number[2] =='0' :
+              words = "maana " + number_words1[number[0]] 
+        else: 
+            words = "Maana " + number_words1[number[0]] + " miongo " + number_words[number[1]] + ' na '+ number_words[number[2]]
+    elif len(number) == 4:
+        # Four-digit number or five-digit number
+       if number[0] in ['1','2','3','4','5','6','7','8','9'] and number[1]== '0' and number[2] == '0' and number[3]== '0':
+            words = "Ngili " + number_words[number[0]]
+       # ...
+
+       elif number[0] in ['1', '2', '3', '4', '5', '6', '7', '8', '9'] and number[1] == '1' and number[2] in ['1', '2', '3', '4', '5', '6', '7', '8', '9'] and number[3] in ['1', '2', '3', '4', '5', '6', '7', '8', '9']:
+        words = "Ngili " + number_words[number[0]] + 'iana yimwe' + " Miongo " + number_words[number[2]] + " na " + number_words[number[3]]
+       else:
+        words = "Ngili " + number_words[number[0]] + ' maana ' + number_words1[number[1]] + " Miongo " + number_words[number[2]] + " na " + number_words[number[3]]
+
+# ...
+
+        #number[1]] + ' miongo ' + number_words[number[2]] + ' na ' + number_words[number[3]]
+       # rest = convert_number_to_words(number[1:])
+        #words = thousands + " " + rest
+    elif len(number)== 5:
+        # Six-digit number or larger
+        hundreds_of_thousands = "Ngiri " + number_words[number[0]] + " mirogo " + number_words[number[1]] + " na " + convert_number_to_words(number[2:])
+        #rest = convert_number_to_words(number[2:])
+        #words = hundreds_of_thousands + " " + rest
+    else:
+        return "Invalid input. Please enter a valid number."
+
+    return words
+
+
+ # def convert_words_to_number(words):
+    # Check if the input is a word
+   # if not re.match(word_regex, words):
+        #return "Invalid input. Please enter a valid word."
+
+    # Convert each word to its corresponding digit
+    #digits = [word_numbers[word.capitalize()] for word in words.split()]
+
+    # Join the digits and return the result
+    #return ''.join(digits)
+
+# Test the conversion functions
+while True:
+    user_input = input("Enter a number or a word (q to quit): ")
+
+    if user_input.lower() == 'q':
+        break
+
+    if re.match(number_regex, user_input):
+       result = convert_number_to_words(user_input)
+    #elif re.match(word_regex, user_input):
+        #result = convert_words_to_number(user_input)
+    #else:
+        #result = "Invalid input. Please enter a valid number or word."
+
+    print(result)
