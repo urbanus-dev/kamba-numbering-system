@@ -1,0 +1,95 @@
+class NumberNotInLanguageException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+def convert_from_hundred_to_thousand(number):
+    def convert_to_number(num):
+        numbers = {
+            "noti": 0,
+            "imwe": 1,
+            "ili": 2,
+            "itatu": 3,
+            "inya": 4,
+            "itano": 5,
+            "thanthatu": 6,
+            "muonza": 7,
+            "nyanya": 8,
+            "keenda": 9
+        }
+
+        if num in numbers:
+            return numbers[num]
+        else:
+            raise NumberNotInLanguageException("Language not understood")
+
+    def convert_string_to_numbers(num):
+        input_num = num.strip()
+        if input_num == "ikumi":
+
+            return 10
+        elif input_num=="miongo ina":
+            return 40
+        elif "ikumi" in num:
+            last_num = num.split(" ")[2]
+            return int(f"1{convert_to_number(last_num)}")
+        elif "miongo" in num:
+            num_array = num.split(" ")
+            if len(num_array) == 4:
+                tenth_num = num_array[1]
+                last_num = num_array[3]
+                output = f"{convert_to_number(tenth_num)}{convert_to_number(last_num)}"
+                return int(output)
+            else:
+                tenth_num = num_array[1]
+                output = f"{convert_to_number(tenth_num)}0"
+                return int(output)
+        else:
+            return convert_to_number(num)
+
+    num_array = number.split(" ")
+    if "iana" in number.lower():  # Case-insensitive check
+        if len(num_array) == 1:
+            return 100
+        elif len(num_array) == 3:
+            tens = num_array[2]
+            output = f"1{convert_string_to_numbers(tens)}"
+            return int(output)
+        elif len(num_array) == 4:
+            last_no = f"{num_array[2]} {num_array[3]} "
+            output = f"1{convert_string_to_numbers(last_no)}"
+            return int(output)
+        else:
+            last_no = f"{num_array[2]} {num_array[3]} {num_array[4]} {num_array[5]}"
+            output = f"1{convert_string_to_numbers(last_no)}"
+            return int(output)
+    elif "maana" in number.lower():  # Case-insensitive check
+        if len(num_array) == 2:
+            return int(f"{convert_to_number(num_array[1].strip())}00")
+        elif len(num_array) == 4:
+            return int(f"{convert_to_number(num_array[1].strip())}10")
+        elif len(num_array) == 6:
+            tenths = f"{num_array[3]} {num_array[4]} {num_array[5]}"
+            no = f"{convert_to_number(num_array[1].strip())}{convert_string_to_numbers(tenths)}"
+        elif len(num_array) == 7:
+             return int(no)
+           tenths = f"{num_array[3]} {num_array[4]} {num_array[5]} {num_array[6]}"
+            no = f"{convert_to_number(num_array[1].strip())}{convert_string_to_numbers(tenths)}"
+            return int(no)
+        else:
+            return 401
+    else:
+        return convert_string_to_numbers(number)
+
+
+def main():
+    try:
+        user_input = input("Enter the text representation of a number: ")
+        result = convert_from_hundred_to_thousand(user_input)
+        print(result)
+    except NumberNotInLanguageException as e:
+        print(e)
+
+
+if __name__ == "__main__":
+    main()
+
